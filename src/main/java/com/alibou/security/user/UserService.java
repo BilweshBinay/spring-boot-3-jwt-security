@@ -32,4 +32,15 @@ public class UserService {
         // save the new password
         repository.save(user);
     }
+
+    public ProfileResponse getProfile(Principal connectedUser) {
+
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+        return ProfileResponse.builder().id(user.getId())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .email(user.getEmail())
+                .role(user.getRole()).build();
+    }
 }
