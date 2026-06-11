@@ -43,4 +43,19 @@ public class UserService {
                 .email(user.getEmail())
                 .role(user.getRole()).build();
     }
+
+    public Object updateProfile(UpdateProfileRequest request, Principal connectedUser) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+        user.setFirstname(request.getFirstname());
+        user.setLastname(request.getLastname());
+
+        repository.save(user);
+
+        return ProfileResponse.builder().id(user.getId())
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .email(user.getEmail())
+                .role(user.getRole()).build();
+    }
 }

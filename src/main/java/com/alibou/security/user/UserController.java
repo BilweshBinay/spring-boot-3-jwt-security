@@ -27,4 +27,11 @@ public class UserController {
         System.out.println("This is working");
         return ResponseEntity.ok(service.getProfile(connectedUser));
     }
+
+    @PatchMapping("/profile")
+    public ResponseEntity<?> changePassword(@RequestBody UpdateProfileRequest request,
+                                            Principal connectedUser){
+        return ResponseEntity.ok(
+                service.updateProfile(request, connectedUser));
+    }
 }
