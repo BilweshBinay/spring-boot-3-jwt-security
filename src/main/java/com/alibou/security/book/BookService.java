@@ -1,10 +1,7 @@
 package com.alibou.security.book;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -16,7 +13,6 @@ public class BookService {
 
     public void save(BookRequest request) {
         var book = Book.builder()
-                .id(request.getId())
                 .author(request.getAuthor())
                 .isbn(request.getIsbn())
                 .build();
@@ -28,6 +24,16 @@ public class BookService {
     }
 
     public Book findById(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Book Not Found"));
+        return repository.findById(id).orElseThrow(() -> new BookNotFoundException("Book Not Found"));
+    }
+
+    public Book updateBook(Integer id, BookRequest request) {
+        var book = repository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book Not Found"));
+
+        book.setAuthor(request.getAuthor());
+        book.setIsbn(request.getIsbn());
+
+        return repository.save(book);
     }
 }
